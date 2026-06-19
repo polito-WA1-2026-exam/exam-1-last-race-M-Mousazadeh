@@ -98,8 +98,18 @@ export default function RoutePanel({
 
                 return (
                   <div key={idx} className="d-flex align-items-center gap-2">
-                    {idx > 0 && <div className="text-muted ps-2 py-0 my-0" style={{ fontSize: '10px' }}>▼</div>}
-                    <div className="d-flex align-items-center gap-2 w-100">
+                    {idx > 0 && (
+                      <div
+                        className="text-muted ps-2 py-0 my-0 route-chain-connector"
+                        style={{ fontSize: '10px', animationDelay: `${idx * 0.08}s` }}
+                      >
+                        ▼
+                      </div>
+                    )}
+                    <div
+                      className="d-flex align-items-center gap-2 w-100 route-chain-node"
+                      style={{ animationDelay: `${idx * 0.08}s` }}
+                    >
                       <Badge bg={badgeColor} className="py-1 px-2 text-wrap text-start">
                         {stationName}
                       </Badge>
@@ -118,17 +128,17 @@ export default function RoutePanel({
         {/* Dynamic Status Badges */}
         <div className="mb-3">
           {pathInfo.disconnected && (
-            <div className="alert alert-warning py-2 px-3 small mb-0">
+            <div className="alert alert-warning py-2 px-3 small mb-0 route-status-animate" key="disconnected">
               ⚠️ <strong>Disconnected Path!</strong> The last segment does not connect to your previous station. The route will be invalid.
             </div>
           )}
           {!pathInfo.disconnected && hasRoute && !reachedDest && (
-            <div className="alert alert-secondary py-2 px-3 small mb-0">
+            <div className="alert alert-secondary py-2 px-3 small mb-0 route-status-animate" key="in-progress">
               ℹ️ <strong>In Progress:</strong> Keep chaining segments to reach <strong>{destStation?.name}</strong>.
             </div>
           )}
           {!pathInfo.disconnected && reachedDest && (
-            <div className="alert alert-success py-2 px-3 small mb-0">
+            <div className="alert alert-success py-2 px-3 small mb-0 route-status-animate" key="connected">
               ✅ <strong>Path Connected!</strong> Route reaches the destination. Ready to submit!
             </div>
           )}

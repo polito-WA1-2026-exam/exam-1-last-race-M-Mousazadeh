@@ -102,11 +102,150 @@ body {
 }
 
 /* Map hover transitions for dots and legend entries */
-polyline, circle, line {
+polyline, circle {
   transition: all 0.3s ease;
 }
 
 circle:hover {
   filter: brightness(1.1);
   cursor: pointer;
+}
+
+/* ===== SEGMENT SELECTION ANIMATIONS ===== */
+
+/* Route line draw-in effect on the SVG map */
+.route-segment-line {
+  animation: drawSegment 0.5s ease-out forwards;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+}
+
+@keyframes drawSegment {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Flowing dashes along the active route path */
+.route-segment-line-animated {
+  stroke-dasharray: 8 6;
+  animation: flowDash 1.2s linear infinite;
+}
+
+@keyframes flowDash {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+/* Segment list item selection flash */
+.segment-item-selected {
+  animation: segmentFlash 0.45s ease-out;
+}
+
+@keyframes segmentFlash {
+  0% {
+    background-color: rgba(13, 110, 253, 0.18);
+    transform: scale(1.02);
+  }
+  50% {
+    background-color: rgba(13, 110, 253, 0.08);
+  }
+  100% {
+    background-color: #f8f9fa;
+    transform: scale(1);
+  }
+}
+
+/* Segment list item hover enhancement */
+.segment-item-available {
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.segment-item-available:hover {
+  background-color: rgba(13, 110, 253, 0.04) !important;
+  transform: translateX(2px);
+  box-shadow: inset 3px 0 0 0 #0d6efd;
+}
+
+/* Route chain node entrance animation */
+.route-chain-node {
+  animation: nodeSlideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  opacity: 0;
+}
+
+@keyframes nodeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-14px) scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* Connector arrow between route chain nodes */
+.route-chain-connector {
+  animation: connectorDrop 0.25s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes connectorDrop {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Glow pulse for the current endpoint station on the map */
+.station-current-glow {
+  animation: stationPulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes stationPulse {
+  from {
+    filter: drop-shadow(0 0 3px rgba(13, 110, 253, 0.4));
+  }
+  to {
+    filter: drop-shadow(0 0 10px rgba(13, 110, 253, 0.85));
+  }
+}
+
+/* Path tip info box animate-in on endpoint change */
+.path-tip-animate {
+  animation: tipSlideIn 0.3s ease-out forwards;
+}
+
+@keyframes tipSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 60px;
+  }
+}
+
+/* Route status badge transition */
+.route-status-animate {
+  animation: statusFade 0.35s ease-out forwards;
+}
+
+@keyframes statusFade {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

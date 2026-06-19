@@ -152,3 +152,4 @@ Used AI (Mostly Gemeni and Claude) for planning the structure and best practices
 Utilized AI for debugging and Testing the app and check the final version codebase with AI tools.
 Created Documentation, Seed file, DB structure by getting assist from AI tools.
 Utilizing AI for potential desing and some custom css and better usage of Bootstrap components.
+Usage of AI in adding some css animations for the game page.

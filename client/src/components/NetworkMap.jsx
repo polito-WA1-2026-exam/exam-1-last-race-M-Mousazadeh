@@ -77,24 +77,39 @@ export default function NetworkMap({
         })}
 
         {/* 2. DRAW CURRENT PLANNED PATH SECTIONS (Planning phase) */}
-        {!showLines && activePathLines.map((line, idx) => (
-          <line
-            key={`active-line-${idx}`}
-            x1={line.x1}
-            y1={line.y1}
-            x2={line.x2}
-            y2={line.y2}
-            stroke="#212529"
-            strokeWidth="5"
-            strokeDasharray="4 4"
-            strokeLinecap="round"
-          />
-        ))}
+        {!showLines && activePathLines.map((seg, idx) => {
+          const isLast = idx === activePathLines.length - 1;
+          return (
+            <line
+              key={`active-line-${idx}-${seg.x1}-${seg.y1}-${seg.x2}-${seg.y2}`}
+              x1={seg.x1}
+              y1={seg.y1}
+              x2={seg.x2}
+              y2={seg.y2}
+              stroke="#212529"
+              strokeWidth="5"
+              strokeLinecap="round"
+              className={isLast ? 'route-segment-line' : 'route-segment-line-animated'}
+            />
+          );
+        })}
 
         {/* 3. DRAW STATION DOTS */}
         {stations.map(station => {
           const isStart = startStation && startStation.id === station.id;
           const isDest = destStation && destStation.id === station.id;
+
+          // Check if this station is the current endpoint of the built route
+          const isCurrentEndpoint = !showLines && routeSegments.length > 0 && (() => {
+            let curr = startStation?.id;
+            for (const key of routeSegments) {
+              const parts = key.split('-').map(Number);
+              if (parts[0] === curr) curr = parts[1];
+              else if (parts[1] === curr) curr = parts[0];
+              else { curr = null; break; }
+            }
+            return curr === station.id && !isStart && !isDest;
+          })();
 
           // Determine dot style
           let circleColor = '#6c757d';
@@ -112,10 +127,15 @@ export default function NetworkMap({
             r = 12;
             strokeColor = '#f5d6da';
             strokeWidth = 5;
+          } else if (isCurrentEndpoint) {
+            circleColor = '#0d6efd'; // Blue for current endpoint
+            r = 11;
+            strokeColor = '#cfe2ff';
+            strokeWidth = 4;
           }
 
           return (
-            <g key={station.id}>
+            <g key={station.id} className={isCurrentEndpoint ? 'station-current-glow' : ''}>
               {/* Station shadow/glow circle */}
               <circle
                 cx={station.x}
@@ -133,8 +153,8 @@ export default function NetworkMap({
                 y={station.y - r - 4}
                 textAnchor="middle"
                 fontSize="12"
-                fontWeight={isStart || isDest ? 'bold' : 'normal'}
-                fill={isStart ? '#1e7e34' : isDest ? '#bd2130' : '#212529'}
+                fontWeight={isStart || isDest || isCurrentEndpoint ? 'bold' : 'normal'}
+                fill={isStart ? '#1e7e34' : isDest ? '#bd2130' : isCurrentEndpoint ? '#0d6efd' : '#212529'}
                 style={{
                   textShadow: '1px 1px 1px #fff, -1px -1px 1px #fff, 1px -1px 1px #fff, -1px 1px 1px #fff',
                   userSelect: 'none'

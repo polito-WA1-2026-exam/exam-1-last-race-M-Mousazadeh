@@ -26,7 +26,7 @@ export default function SegmentList({
       </div>
 
       {currentEndpointName && (
-        <div className="alert alert-info py-2 px-3 mb-3 small">
+        <div className="alert alert-info py-2 px-3 mb-3 small path-tip-animate" key={currentEndpointName}>
           <strong>Path tip:</strong> Chaining from <strong>{currentEndpointName}</strong>.
         </div>
       )}
@@ -43,7 +43,9 @@ export default function SegmentList({
             return (
               <ListGroup.Item
                 key={seg.id}
-                className="d-flex justify-content-between align-items-center py-2 px-1 border-bottom"
+                className={`d-flex justify-content-between align-items-center py-2 px-1 border-bottom ${
+                  isUsed ? 'segment-item-selected' : 'segment-item-available'
+                }`}
                 style={{
                   backgroundColor: isUsed ? '#f8f9fa' : 'transparent',
                   opacity: isUsed ? 0.6 : 1
